@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Up! — Draw Your Card</title>
+<title>Order Up! Live</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap');
-
+ 
   :root{
     --cream: #FFF6E9;
     --ink: #241A15;
@@ -14,12 +14,13 @@
     --peach: #FFB88C;
     --mango: #FFCA3A;
     --teal: #1FAE9F;
+    --mint: #7CE0C6;
     --card-shadow: 6px 6px 0px var(--ink);
     --accent: var(--hotpink);
   }
-
+ 
   *{box-sizing:border-box;}
-
+ 
   body{
     margin:0;
     min-height:100vh;
@@ -34,7 +35,7 @@
     align-items:center;
     padding:32px 16px 60px;
   }
-
+ 
   .eyebrow{
     font-size:12px;
     letter-spacing:0.18em;
@@ -45,35 +46,37 @@
     border-radius:100px;
     margin-bottom:14px;
   }
-
+ 
   h1{
     font-family:'Baloo 2', cursive;
     font-weight:800;
-    font-size:clamp(30px, 7vw, 50px);
+    font-size:clamp(28px, 7vw, 46px);
     margin:0 0 6px;
     text-align:center;
-    line-height:1.08;
+    line-height:1.1;
   }
   h1 span{ color:var(--accent); }
-
+ 
   .sub{
     max-width:420px;
     text-align:center;
     font-size:13px;
     line-height:1.65;
-    margin:12px 0 34px;
+    margin:12px 0 30px;
     opacity:0.75;
   }
-
-  /* ---------- SELECTOR VIEW ---------- */
-  .selector{
+ 
+  .col{
     display:flex;
     flex-direction:column;
-    gap:18px;
+    gap:16px;
     width:min(92vw, 380px);
+    align-items:center;
   }
-
-  .role-btn{
+ 
+  /* Buttons */
+  .big-btn{
+    width:100%;
     display:flex;
     align-items:center;
     gap:16px;
@@ -81,185 +84,45 @@
     background:#fff;
     border:3px solid var(--ink);
     border-radius:20px;
-    padding:20px;
+    padding:18px 20px;
     cursor:pointer;
     font-family:'Space Mono', monospace;
     box-shadow: var(--card-shadow);
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  .role-btn:hover{
-    transform: translate(-2px,-2px);
-    box-shadow: 8px 8px 0 var(--ink);
-  }
-  .role-btn:active{
-    transform: translate(2px,2px);
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-  .role-btn:focus-visible{ outline:none; }
-
-  .role-btn .icon-badge{
-    font-size:30px;
+  .big-btn:hover{ transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink); }
+  .big-btn:active{ transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
+  .big-btn:focus-visible{ outline:none; }
+  .big-btn:disabled{ opacity:0.4; cursor:not-allowed; transform:none; box-shadow: var(--card-shadow); }
+ 
+  .big-btn .icon-badge{
+    font-size:28px;
     flex-shrink:0;
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
     border-radius:14px;
     display:flex;
     align-items:center;
     justify-content:center;
     border:3px solid var(--ink);
   }
-  .role-btn.buyer .icon-badge{ background:var(--peach); }
-  .role-btn.seller .icon-badge{ background:var(--mint, #7CE0C6); }
-
-  .role-btn .role-title{
+  .big-btn.buyer .icon-badge{ background:var(--peach); }
+  .big-btn.seller .icon-badge{ background:var(--mint); }
+  .big-btn.create .icon-badge{ background:var(--mango); }
+  .big-btn.join .icon-badge{ background:var(--mint); }
+ 
+  .big-btn .btn-title{
     font-family:'Baloo 2', cursive;
     font-weight:700;
-    font-size:19px;
-    margin-bottom:4px;
+    font-size:17px;
+    margin-bottom:3px;
   }
-  .role-btn .role-desc{
-    font-size:11.5px;
+  .big-btn .btn-desc{
+    font-size:11px;
     line-height:1.5;
     opacity:0.7;
   }
-
-  /* ---------- CARD VIEW ---------- */
-  .card-view{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    width:100%;
-  }
-  .card-view.active{ display:flex; }
-  .selector.hidden{ display:none; }
-
-  .back-link{
-    align-self:flex-start;
-    max-width:380px;
-    width:min(92vw, 380px);
-    margin: 0 auto 18px;
-    background:none;
-    border:none;
-    font-family:'Space Mono', monospace;
-    font-size:12px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--ink);
-    opacity:0.6;
-    cursor:pointer;
-    padding:0;
-  }
-  .back-link:hover{ opacity:1; }
-  .back-link:focus-visible{ outline:none; }
-
-  .stage{
-    position:relative;
-    display:grid;
-    grid-template-areas:"card";
-    width:min(92vw, 380px);
-    margin-bottom:30px;
-  }
-
-  .cardface{
-    grid-area:card;
-    position:relative;
-    width:100%;
-    min-height:260px;
-    border-radius:20px;
-    border:3px solid var(--ink);
-    box-shadow: var(--card-shadow);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    padding:24px 20px;
-    text-align:center;
-    backface-visibility:hidden;
-    transition: transform 0.7s cubic-bezier(.2,.9,.25,1), opacity 0.3s;
-  }
-
-  .cardface.back{
-    font-family:'Baloo 2', cursive;
-    font-weight:800;
-    color:var(--cream);
-    font-size:22px;
-    z-index:2;
-  }
-  .card-view.buyer-view .cardface.back{
-    background: repeating-linear-gradient(45deg, var(--hotpink) 0 10px, #ff6b85 10px 20px);
-  }
-  .card-view.seller-view .cardface.back{
-    background: repeating-linear-gradient(45deg, var(--teal) 0 10px, #29c2b1 10px 20px);
-  }
-
-  .cardface.back .tap-hint{
-    margin-top:10px;
-    font-family:'Space Mono', monospace;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.14em;
-    background:var(--ink);
-    color:var(--cream);
-    padding:4px 10px;
-    border-radius:100px;
-  }
-
-  .cardface.front{
-    background:#fff;
-    opacity:0;
-    transform: rotateY(180deg);
-    z-index:1;
-  }
-
-  .stage.revealed .cardface.back{
-    transform: rotateY(180deg);
-    opacity:0;
-    pointer-events:none;
-    z-index:1;
-  }
-  .stage.revealed .cardface.front{
-    transform: rotateY(0deg);
-    opacity:1;
-    z-index:2;
-  }
-
-  .tag{
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    padding:4px 10px;
-    border-radius:100px;
-    margin-bottom:12px;
-    font-family:'Space Mono', monospace;
-    background:var(--mango);
-  }
-  .tag.persona{ background:var(--teal); color:#fff; }
-
-  .icon{ font-size:34px; margin-bottom:8px; }
-  .flag{ font-size:26px; margin-bottom:6px; }
-
-  .front .headline{
-    font-family:'Baloo 2', cursive;
-    font-weight:700;
-    font-size:clamp(16px, 4.6vw, 19px);
-    line-height:1.3;
-    margin: 4px 0 10px;
-    overflow-wrap:break-word;
-  }
-  .front .detail{
-    font-size:clamp(11px, 3.4vw, 12.5px);
-    line-height:1.6;
-    opacity:0.82;
-    max-width:280px;
-    overflow-wrap:break-word;
-  }
-  .front .divider{
-    width:60%;
-    height:2px;
-    background:repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px);
-    margin:16px 0;
-  }
-
+ 
   button.draw-btn{
     font-family:'Baloo 2', cursive;
     font-weight:700;
@@ -273,16 +136,202 @@
     box-shadow: 5px 5px 0 var(--accent);
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  button.draw-btn:hover{
-    transform: translate(-2px,-2px);
-    box-shadow: 7px 7px 0 var(--accent);
-  }
-  button.draw-btn:active{
-    transform: translate(2px,2px);
-    box-shadow: 2px 2px 0 var(--accent);
-  }
+  button.draw-btn:hover{ transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--accent); }
+  button.draw-btn:active{ transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--accent); }
   button.draw-btn:focus-visible{ outline:none; }
-
+  button.draw-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+ 
+  button.ghost-btn{
+    background:none;
+    border:2px dashed var(--ink);
+    border-radius:100px;
+    padding:9px 18px;
+    font-family:'Space Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink);
+    opacity:0.7;
+    cursor:pointer;
+  }
+  button.ghost-btn:hover{ opacity:1; }
+  button.ghost-btn:focus-visible{ outline:none; }
+ 
+  input.code-input{
+    width:100%;
+    text-align:center;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    padding:14px;
+    border-radius:16px;
+    border:3px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+  }
+  input.code-input:focus{ outline:2px solid var(--teal); }
+ 
+  .code-display{
+    font-family:'Baloo 2', cursive;
+    font-weight:800;
+    font-size:38px;
+    letter-spacing:0.15em;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:12px 24px;
+    box-shadow: var(--card-shadow);
+    margin-bottom:6px;
+  }
+  .code-label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    opacity:0.6;
+    margin-bottom:10px;
+  }
+ 
+  .status-row{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .status-chip{
+    flex:1;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:14px;
+    text-align:center;
+  }
+  .status-chip .chip-role{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:4px;
+  }
+  .status-chip .chip-state{
+    font-size:11px;
+    opacity:0.7;
+  }
+  .status-chip.ready{ background: var(--mint); }
+ 
+  /* Card */
+  .stage{
+    width:min(92vw, 380px);
+  }
+  .cardface{
+    width:100%;
+    min-height:200px;
+    border-radius:20px;
+    border:3px solid var(--ink);
+    box-shadow: var(--card-shadow);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:24px 20px;
+    text-align:center;
+    background:#fff;
+  }
+ 
+  .tag{
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:100px;
+    margin-bottom:12px;
+    font-family:'Space Mono', monospace;
+    background:var(--mango);
+  }
+  .tag.persona{ background:var(--teal); color:#fff; }
+  .tag.rule{ background:var(--ink); color:var(--cream); }
+ 
+  .icon{ font-size:34px; margin-bottom:8px; }
+  .flag{ font-size:26px; margin-bottom:6px; }
+ 
+  .front .headline, .cardface .headline{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size:clamp(16px, 4.6vw, 19px);
+    line-height:1.3;
+    margin: 4px 0 10px;
+    overflow-wrap:break-word;
+  }
+  .front .detail, .cardface .detail{
+    font-size:clamp(11px, 3.4vw, 12.5px);
+    line-height:1.6;
+    opacity:0.82;
+    max-width:280px;
+    overflow-wrap:break-word;
+  }
+  .front .divider, .cardface .divider{
+    width:60%;
+    height:2px;
+    background:repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px);
+    margin:16px 0;
+  }
+ 
+  /* Timer */
+  .timer-ring{
+    font-family:'Baloo 2', cursive;
+    font-weight:800;
+    font-size:52px;
+    background:#fff;
+    border:4px solid var(--ink);
+    border-radius:24px;
+    padding:18px 40px;
+    box-shadow: var(--card-shadow);
+    margin-bottom:8px;
+    letter-spacing:0.05em;
+  }
+  .timer-label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    opacity:0.65;
+    margin-bottom:22px;
+    text-align:center;
+  }
+ 
+  .guess-panel{
+    width:100%;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:18px;
+    padding:16px;
+    box-shadow: var(--card-shadow);
+  }
+  .guess-panel .guess-title{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size:14px;
+    text-align:center;
+    margin-bottom:10px;
+  }
+  .guess-list{ display:flex; flex-direction:column; gap:8px; }
+  .guess-chip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--cream);
+    border:2px solid var(--ink);
+    border-radius:12px;
+    padding:9px 12px;
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+  }
+  .guess-chip .g-icon{ font-size:16px; }
+ 
+  .error-text{
+    color:var(--hotpink);
+    font-size:12px;
+    text-align:center;
+    min-height:16px;
+  }
+ 
   .footer-note{
     margin-top:22px;
     font-size:11px;
@@ -291,65 +340,39 @@
     max-width:340px;
     line-height:1.6;
   }
-
-  @media (prefers-reduced-motion: reduce){
-    .cardface{ transition:none; }
+ 
+  .spin{
+    width:22px; height:22px;
+    border:3px solid var(--ink);
+    border-top-color:transparent;
+    border-radius:50%;
+    animation: spin 0.8s linear infinite;
+    margin:0 auto;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+ 
+  .reveal-box{
+    width:100%;
+    background:var(--cream);
+    border:2px dashed var(--ink);
+    border-radius:14px;
+    padding:12px;
+    text-align:center;
+    font-size:12px;
+    margin-top:10px;
   }
 </style>
 </head>
 <body>
-
-  <div class="eyebrow">Purposive Communication · Order Up!</div>
-  <h1>Draw Your <span id="mainSpan">Card</span></h1>
-  <p class="sub" id="mainSub">Pick your role for this round — buyer or seller — then tap the card to reveal what you got.</p>
-
-  <!-- SELECTOR -->
-  <div class="selector" id="selector">
-    <button class="role-btn buyer" id="goBuyer">
-      <div class="icon-badge">🛍️</div>
-      <div>
-        <div class="role-title">I'm the Buyer</div>
-        <div class="role-desc">Get a product to order + a foreign buyer persona.</div>
-      </div>
-    </button>
-    <button class="role-btn seller" id="goSeller">
-      <div class="icon-badge">🏪</div>
-      <div>
-        <div class="role-title">I'm the Seller</div>
-        <div class="role-desc">Get a negotiation barrier to work into the chat.</div>
-      </div>
-    </button>
-  </div>
-
-  <!-- BUYER VIEW -->
-  <div class="card-view buyer-view" id="buyerView">
-    <button class="back-link" data-back>&larr; back</button>
-    <div class="stage" id="buyerStage">
-      <div class="cardface back">
-        <div>🎴 DRAW CARD</div>
-        <div class="tap-hint">tap or press draw</div>
-      </div>
-      <div class="cardface front" id="buyerFront"></div>
-    </div>
-    <button class="draw-btn" id="buyerDraw">Draw My Card</button>
-    <p class="footer-note">Once you're in character, message the seller's GC and try to order this item — naturally, in your own words.</p>
-  </div>
-
-  <!-- SELLER VIEW -->
-  <div class="card-view seller-view" id="sellerView">
-    <button class="back-link" data-back>&larr; back</button>
-    <div class="stage" id="sellerStage">
-      <div class="cardface back">
-        <div>🎴 DRAW CARD</div>
-        <div class="tap-hint">tap or press draw</div>
-      </div>
-      <div class="cardface front" id="sellerFront"></div>
-    </div>
-    <button class="draw-btn" id="sellerDraw">Draw My Card</button>
-    <p class="footer-note">Prep for 5 minutes with your group before the GC starts — figure out how you'll bring this up naturally.</p>
-  </div>
-
+ 
+  <div class="eyebrow">Purposive Communication · Order Up! Live</div>
+  <h1 id="mainTitle">Order Up! <span>Live</span></h1>
+  <p class="sub" id="mainSub">One phone per group. Create a round or join with a code — then draw, prep, and negotiate together in real time.</p>
+ 
+  <div id="app" class="col"></div>
+ 
 <script>
+  // ---------------- DATA ----------------
   const products = [
     { title: "Korean skincare set", detail: "Trending on TikTok, you need it ASAP." },
     { title: "Thrifted oversized hoodie", detail: "Specific streetwear aesthetic, non-negotiable." },
@@ -362,95 +385,398 @@
     { title: "Resin keychain or charm", detail: "Cute, personalized, maybe with initials." },
     { title: "Filipino pasalubong pack", detail: "Dried mangoes, polvoron — a gift for a friend abroad." }
   ];
-
+ 
   const personas = [
-    { flag: "🇰🇷", name: "Minji from South Korea", style: "Very polite, says 'please' a lot, references K-content." },
-    { flag: "🇯🇵", name: "Haruto from Japan", style: "Formal and thorough, double-checks every detail." },
-    { flag: "🇺🇸", name: "Jordan from the USA", style: "Super casual, uses 'lowkey', 'no cap', straight to the point." },
-    { flag: "🇬🇧", name: "Amelia from the UK", style: "Says 'cheers' and 'brilliant', dry sense of humor." },
-    { flag: "🇸🇦", name: "Layla from Saudi Arabia", style: "Warm and formal greetings, values politeness first." },
-    { flag: "🇧🇷", name: "Lucas from Brazil", style: "Friendly and expressive, sends long enthusiastic messages." },
-    { flag: "🇦🇺", name: "Chloe from Australia", style: "Relaxed and chatty, uses a lot of shortened slang." }
+    { flag: "🇰🇷", name: "Minji from South Korea", style: "Very polite, says 'please' a lot, references K-content.", currency: "Korean Won (₩) — ₱1 ≈ ₩24" },
+    { flag: "🇯🇵", name: "Haruto from Japan", style: "Formal and thorough, double-checks every detail.", currency: "Japanese Yen (¥) — ₱1 ≈ ¥2.5" },
+    { flag: "🇺🇸", name: "Jordan from the USA", style: "Super casual, uses 'lowkey', 'no cap', straight to the point.", currency: "US Dollars ($) — ₱1 ≈ $0.02" },
+    { flag: "🇬🇧", name: "Amelia from the UK", style: "Says 'cheers' and 'brilliant', dry sense of humor.", currency: "British Pounds (£) — ₱1 ≈ £0.01" },
+    { flag: "🇸🇦", name: "Layla from Saudi Arabia", style: "Warm and formal greetings, values politeness first.", currency: "Saudi Riyal (﷼) — ₱1 ≈ ﷼0.07" },
+    { flag: "🇧🇷", name: "Lucas from Brazil", style: "Friendly and expressive, sends long enthusiastic messages.", currency: "Brazilian Real (R$) — ₱1 ≈ R$0.10" },
+    { flag: "🇦🇺", name: "Chloe from Australia", style: "Relaxed and chatty, uses a lot of shortened slang.", currency: "Australian Dollars (A$) — ₱1 ≈ A$0.03" }
   ];
-
+ 
+  const buyerRule = "Stay in character as a foreigner. Text the way your persona would (casual buyers can use slang, formal buyers write full polite sentences). You do NOT understand Tagalog or Filipino expressions like 'po' or 'sana all' — if your seller uses one, you genuinely don't get it, ask what it means. React honestly if anything feels confusing, slow, or different from what you expected.";
+  const sellerRule = "You are a Filipino online seller — small shop, casual Taglish style, 'po' and all. Reply the way you'd naturally text a customer.";
+ 
   const barriers = [
-    { icon: "🕐", title: "Time Zone Mismatch", detail: "Buyer's messaging you at 3AM your time. Reply na, pero antok na antok ka." },
-    { icon: "🗣️", title: "Confusing Slang", detail: "Buyer used a word/phrase you don't understand. Kailangan mo pa mag-Google or magtanong." },
-    { icon: "💸", title: "Currency Confusion", detail: "Buyer thinks the price is in dollars/won/yen, hindi pesos. Kailangan i-clarify." },
-    { icon: "📦", title: "Shipping Reality Check", detail: "Buyer expects it in 2 days, pero international shipping = 2-3 weeks. Break the news nicely." },
-    { icon: "🎭", title: "Too Formal / Too Casual", detail: "Buyer's super formal ('Dear Seller, I would like to inquire...') pero ikaw sanay sa 'Hi po! Meron pa!' Kailangan mo i-adjust yung tono mo." },
-    { icon: "😅", title: "Lost in Translation", detail: "Buyer used Google Translate and it came out weird/confusing. Kailangan mong hulaan ang ibig sabihin." },
-    { icon: "🌏", title: "Cultural Gap", detail: "Buyer doesn't get a Filipino term/slang you used (like 'po', 'sana all', 'char'). Kailangan mo i-explain." },
-    { icon: "📵", title: "Dry Reply Vibes", detail: "Buyer keeps sending short/dry replies ('ok', 'sure') — mahirap i-basa kung seryoso ba sila o hindi." }
+    { icon: "🕐", title: "Time Zone Mismatch", detail: "Mention that it's late/early for you because of the time difference — even though you're replying now, let your buyer know it's inconvenient timing on your end, and ask if it's okay to continue." },
+    { icon: "🗣️", title: "Confusing Slang", detail: "When your buyer uses a word or phrase you don't understand, stop and ask them to explain it simply before continuing." },
+    { icon: "💸", title: "Currency Confusion", detail: "Always state your price in pesos AND convert it to your buyer's currency, so there's no confusion. (Rough guide: ₱1 ≈ $0.02 US, ₩24 Korea, ¥2.5 Japan, R$0.10 Brazil, £0.01 UK, A$0.03 Australia, ﷼0.07 Saudi)" },
+    { icon: "📦", title: "Shipping Reality Check", detail: "Tell your buyer that international shipping takes 2-3 weeks, even if they expect it sooner — explain it nicely." },
+    { icon: "🎭", title: "Different Communication Style", detail: "Comment on how differently your buyer texts compared to you — whatever the difference is (more formal, more casual, different words) — and ask if it's okay to just reply in your own natural way, po's and all." },
+    { icon: "😅", title: "Lost in Translation", detail: "If your buyer's message sounds off or confusing, politely ask them to rephrase or clarify." },
+    { icon: "🌏", title: "Cultural Gap", detail: "You will naturally say things like 'po,' 'opo,' or Filipino slang ('sana all,' 'char'). When you catch yourself using one, pause and explain what it means to your buyer in simple English." },
+    { icon: "📵", title: "Dry Reply Vibes", detail: "If your buyer's replies feel short or unclear, ask a follow-up question to check if they're still interested." }
   ];
-
-  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-  const selector = document.getElementById('selector');
-  const buyerView = document.getElementById('buyerView');
-  const sellerView = document.getElementById('sellerView');
-  const mainSpan = document.getElementById('mainSpan');
+ 
+  const PREP_SECONDS = 5 * 60;
+  const NEGOTIATE_SECONDS = 5 * 60;
+ 
+  // ---------------- STATE ----------------
+  let code = null;
+  let myRole = null;      // 'buyer' | 'seller'
+  let pollTimer = null;
+  let tickTimer = null;
+  let transitionInFlight = false;
+ 
+  const app = document.getElementById('app');
+  const mainTitle = document.getElementById('mainTitle');
   const mainSub = document.getElementById('mainSub');
-  const root = document.documentElement;
-
-  function showSelector(){
-    selector.classList.remove('hidden');
-    buyerView.classList.remove('active');
-    sellerView.classList.remove('active');
-    mainSpan.textContent = "Card";
-    mainSub.textContent = "Pick your role for this round — buyer or seller — then tap the card to reveal what you got.";
-    root.style.setProperty('--accent', 'var(--hotpink)');
+ 
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+ 
+  function roomKey(c){ return 'room:' + c; }
+ 
+  async function getRoom(c){
+    try{
+      const res = await window.storage.get(roomKey(c), true);
+      if(!res) return null;
+      return JSON.parse(res.value);
+    }catch(e){
+      return null;
+    }
   }
-
-  document.getElementById('goBuyer').addEventListener('click', () => {
-    selector.classList.add('hidden');
-    buyerView.classList.add('active');
-    mainSpan.textContent = "Buyer Card";
-    mainSub.textContent = "Tap the card to find out what you're ordering — and who you are while you order it.";
-    root.style.setProperty('--accent', 'var(--hotpink)');
-  });
-
-  document.getElementById('goSeller').addEventListener('click', () => {
-    selector.classList.add('hidden');
-    sellerView.classList.add('active');
-    mainSpan.textContent = "Seller Card";
-    mainSub.textContent = "Tap the card to find out your negotiation barrier — you'll need to work it into the GC naturally.";
-    root.style.setProperty('--accent', 'var(--teal)');
-  });
-
-  document.querySelectorAll('[data-back]').forEach(btn => {
-    btn.addEventListener('click', showSelector);
-  });
-
-  document.getElementById('buyerDraw').addEventListener('click', () => {
+ 
+  async function setRoom(c, obj){
+    try{
+      const res = await window.storage.set(roomKey(c), JSON.stringify(obj), true);
+      return !!res;
+    }catch(e){
+      return false;
+    }
+  }
+ 
+  function genCode(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let s = '';
+    for(let i=0;i<4;i++) s += chars[Math.floor(Math.random()*chars.length)];
+    return s;
+  }
+ 
+  function fmtTime(sec){
+    sec = Math.max(0, Math.ceil(sec));
+    const m = Math.floor(sec/60);
+    const s = sec % 60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+ 
+  function stopTimers(){
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+    if(tickTimer){ clearInterval(tickTimer); tickTimer = null; }
+  }
+ 
+  // ---------------- SCREENS ----------------
+  function renderHome(){
+    stopTimers();
+    code = null; myRole = null;
+    mainTitle.innerHTML = 'Order Up! <span>Live</span>';
+    mainSub.textContent = "One phone per group. Create a round or join with a code — then draw, prep, and negotiate together in real time.";
+    app.innerHTML = `
+      <button class="big-btn create" id="createBtn">
+        <div class="icon-badge">🆕</div>
+        <div>
+          <div class="btn-title">Create a Round</div>
+          <div class="btn-desc">Start a new room and get a code to share with your partner group.</div>
+        </div>
+      </button>
+      <button class="big-btn join" id="joinBtn">
+        <div class="icon-badge">🔑</div>
+        <div>
+          <div class="btn-title">Join a Round</div>
+          <div class="btn-desc">Enter the code your classmate shared with you.</div>
+        </div>
+      </button>
+    `;
+    document.getElementById('createBtn').addEventListener('click', handleCreate);
+    document.getElementById('joinBtn').addEventListener('click', renderJoinInput);
+  }
+ 
+  async function handleCreate(){
+    app.innerHTML = `<div class="spin"></div>`;
+    let newCode = genCode();
+    let tries = 0;
+    while(await getRoom(newCode) && tries < 5){ newCode = genCode(); tries++; }
+    const room = {
+      code: newCode,
+      buyerJoined: false,
+      sellerJoined: false,
+      phase: 'lobby',
+      phaseStartedAt: null,
+      buyerCard: null,
+      sellerCard: null
+    };
+    await setRoom(newCode, room);
+    code = newCode;
+    renderRoleSelect();
+  }
+ 
+  function renderJoinInput(){
+    app.innerHTML = `
+      <input class="code-input" id="codeIn" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters">
+      <button class="draw-btn" id="submitCode">Join</button>
+      <div class="error-text" id="joinErr"></div>
+      <button class="ghost-btn" id="backHome">&larr; back</button>
+    `;
+    const inputEl = document.getElementById('codeIn');
+    inputEl.focus();
+    document.getElementById('backHome').addEventListener('click', renderHome);
+    document.getElementById('submitCode').addEventListener('click', async () => {
+      const val = inputEl.value.trim().toUpperCase();
+      const errEl = document.getElementById('joinErr');
+      if(val.length < 4){ errEl.textContent = "Enter the 4-character code."; return; }
+      const room = await getRoom(val);
+      if(!room){ errEl.textContent = "Room not found. Check the code and try again."; return; }
+      code = val;
+      renderRoleSelect();
+    });
+  }
+ 
+  async function renderRoleSelect(){
+    stopTimers();
+    app.innerHTML = `<div class="spin"></div>`;
+    const room = await getRoom(code);
+    if(!room){ renderHome(); return; }
+ 
+    mainTitle.innerHTML = 'Pick Your <span>Role</span>';
+    mainSub.textContent = "Only one group per role. Whoever picks first gets it.";
+ 
+    app.innerHTML = `
+      <div class="code-label">Room Code</div>
+      <div class="code-display">${code}</div>
+      <button class="big-btn buyer" id="pickBuyer" ${room.buyerJoined ? 'disabled' : ''}>
+        <div class="icon-badge">🛍️</div>
+        <div>
+          <div class="btn-title">${room.buyerJoined ? "Buyer — taken" : "I'm the Buyer"}</div>
+          <div class="btn-desc">Get a product to order + a foreign persona.</div>
+        </div>
+      </button>
+      <button class="big-btn seller" id="pickSeller" ${room.sellerJoined ? 'disabled' : ''}>
+        <div class="icon-badge">🏪</div>
+        <div>
+          <div class="btn-title">${room.sellerJoined ? "Seller — taken" : "I'm the Seller"}</div>
+          <div class="btn-desc">Get a negotiation barrier to work into the chat.</div>
+        </div>
+      </button>
+      <div class="error-text" id="roleErr"></div>
+      <button class="ghost-btn" id="backHome2">&larr; leave room</button>
+    `;
+    document.getElementById('backHome2').addEventListener('click', renderHome);
+ 
+    document.getElementById('pickBuyer').addEventListener('click', () => claimRole('buyer'));
+    document.getElementById('pickSeller').addEventListener('click', () => claimRole('seller'));
+  }
+ 
+  async function claimRole(role){
+    const errEl = document.getElementById('roleErr');
+    const room = await getRoom(code);
+    if(!room){ renderHome(); return; }
+    const joinedKey = role + 'Joined';
+    if(room[joinedKey]){
+      errEl.textContent = "That role was just taken — pick the other one.";
+      renderRoleSelect();
+      return;
+    }
+    room[joinedKey] = true;
+    await setRoom(code, room);
+    myRole = role;
+    startRoomPolling();
+  }
+ 
+  function startRoomPolling(){
+    stopTimers();
+    pollAndRender();
+    pollTimer = setInterval(pollAndRender, 1800);
+  }
+ 
+  async function pollAndRender(){
+    const room = await getRoom(code);
+    if(!room){ renderHome(); return; }
+    if(room.phase === 'lobby') renderLobby(room);
+    else if(room.phase === 'prep') renderTimerPhase(room, 'prep');
+    else if(room.phase === 'negotiate') renderTimerPhase(room, 'negotiate');
+    else if(room.phase === 'done') renderDone(room);
+  }
+ 
+  function renderLobby(room){
+    if(tickTimer){ clearInterval(tickTimer); tickTimer = null; }
+    mainTitle.innerHTML = 'Waiting <span>Room</span>';
+    mainSub.textContent = "Both groups need to join before the round can start.";
+    const bothReady = room.buyerJoined && room.sellerJoined;
+    app.innerHTML = `
+      <div class="code-label">Room Code</div>
+      <div class="code-display">${code}</div>
+      <div class="status-row">
+        <div class="status-chip ${room.buyerJoined ? 'ready':''}">
+          <div class="chip-role">🛍️ Buyer</div>
+          <div class="chip-state">${room.buyerJoined ? '✅ Joined' : '⏳ Waiting...'}</div>
+        </div>
+        <div class="status-chip ${room.sellerJoined ? 'ready':''}">
+          <div class="chip-role">🏪 Seller</div>
+          <div class="chip-state">${room.sellerJoined ? '✅ Joined' : '⏳ Waiting...'}</div>
+        </div>
+      </div>
+      <button class="draw-btn" id="startRoundBtn" ${bothReady ? '' : 'disabled'}>
+        ${bothReady ? '🎴 Start Round' : 'Waiting for both groups...'}
+      </button>
+      <button class="ghost-btn" id="leaveRoomBtn">&larr; leave room</button>
+      <p class="footer-note">You are the <strong>${myRole === 'buyer' ? 'Buyer' : 'Seller'}</strong> in this room.</p>
+    `;
+    document.getElementById('leaveRoomBtn').addEventListener('click', renderHome);
+    const startBtn = document.getElementById('startRoundBtn');
+    if(bothReady){
+      startBtn.addEventListener('click', startRound);
+    }
+  }
+ 
+  async function startRound(){
+    const room = await getRoom(code);
+    if(!room || room.phase !== 'lobby') return;
     const product = pick(products);
     const persona = pick(personas);
-    document.getElementById('buyerFront').innerHTML = `
+    const barrier = pick(barriers);
+    room.buyerCard = { product, persona };
+    room.sellerCard = { barrier };
+    room.phase = 'prep';
+    room.phaseStartedAt = Date.now();
+    await setRoom(code, room);
+  }
+ 
+  function renderTimerPhase(room, phase){
+    const seconds = phase === 'prep' ? PREP_SECONDS : NEGOTIATE_SECONDS;
+    const label = phase === 'prep' ? 'Prep Time — get ready with your group' : 'Negotiation Time — go to your shared GC now!';
+ 
+    mainTitle.innerHTML = phase === 'prep' ? 'Get <span>Ready</span>' : 'Negotiate <span>Now</span>';
+    mainSub.textContent = myRole === 'buyer'
+      ? "Here's your card. Review it with your group before time runs out."
+      : "Here's your card. Review it with your group before time runs out.";
+ 
+    const cardHtml = myRole === 'buyer' ? buyerCardHtml(room.buyerCard) : sellerCardHtml(room.sellerCard);
+ 
+    app.innerHTML = `
+      <div class="timer-ring" id="timerRing">--:--</div>
+      <div class="timer-label">${label}</div>
+      <div class="stage"><div class="cardface">${cardHtml}</div></div>
+      <p class="footer-note">Both groups are synced — this timer moves for everyone at the same time.</p>
+    `;
+ 
+    if(tickTimer) clearInterval(tickTimer);
+    transitionInFlight = false;
+    const startedAt = room.phaseStartedAt;
+ 
+    function tick(){
+      const elapsed = (Date.now() - startedAt) / 1000;
+      const remaining = seconds - elapsed;
+      const ring = document.getElementById('timerRing');
+      if(ring) ring.textContent = fmtTime(remaining);
+      if(remaining <= 0 && !transitionInFlight){
+        transitionInFlight = true;
+        clearInterval(tickTimer);
+        tickTimer = null;
+        advancePhase(phase);
+      }
+    }
+    tick();
+    tickTimer = setInterval(tick, 1000);
+  }
+ 
+  async function advancePhase(currentPhase){
+    const room = await getRoom(code);
+    if(!room || room.phase !== currentPhase) return; // already moved on
+    if(currentPhase === 'prep'){
+      room.phase = 'negotiate';
+      room.phaseStartedAt = Date.now();
+    }else if(currentPhase === 'negotiate'){
+      room.phase = 'done';
+      room.phaseStartedAt = Date.now();
+    }
+    await setRoom(code, room);
+  }
+ 
+  function buyerCardHtml(buyerCard){
+    if(!buyerCard) return '';
+    const { product, persona } = buyerCard;
+    return `
       <div class="flag">${persona.flag}</div>
       <div class="tag persona">your persona</div>
       <div class="headline">${persona.name}</div>
       <div class="detail">${persona.style}</div>
+      <div class="detail" style="margin-top:4px; opacity:0.65;">💰 Pays in ${persona.currency}</div>
       <div class="divider"></div>
       <div class="tag">you want to buy</div>
       <div class="headline">${product.title}</div>
       <div class="detail">${product.detail}</div>
+      <div class="divider"></div>
+      <div class="tag rule">your rule</div>
+      <div class="detail">${buyerRule}</div>
     `;
-    document.getElementById('buyerStage').classList.add('revealed');
-    document.getElementById('buyerDraw').textContent = "Draw Again";
-  });
-
-  document.getElementById('sellerDraw').addEventListener('click', () => {
-    const barrier = pick(barriers);
-    document.getElementById('sellerFront').innerHTML = `
+  }
+ 
+  function sellerCardHtml(sellerCard){
+    if(!sellerCard) return '';
+    const { barrier } = sellerCard;
+    return `
+      <div class="tag rule">who you are</div>
+      <div class="detail" style="margin-bottom:14px;">${sellerRule}</div>
       <div class="icon">${barrier.icon}</div>
       <div class="tag">your barrier</div>
       <div class="headline">${barrier.title}</div>
       <div class="detail">${barrier.detail}</div>
     `;
-    document.getElementById('sellerStage').classList.add('revealed');
-    document.getElementById('sellerDraw').textContent = "Draw Again";
-  });
+  }
+ 
+  function renderDone(room){
+    if(tickTimer){ clearInterval(tickTimer); tickTimer = null; }
+    mainTitle.innerHTML = 'Time\'s <span>Up!</span>';
+    mainSub.textContent = "Negotiation's over — time for the guessing game.";
+ 
+    if(myRole === 'buyer'){
+      app.innerHTML = `
+        <div class="guess-panel">
+          <div class="guess-title">🎯 What barrier did your seller deal with? Point to it:</div>
+          <div class="guess-list">
+            ${barriers.map(b => `<div class="guess-chip"><span class="g-icon">${b.icon}</span> ${b.title}</div>`).join('')}
+          </div>
+        </div>
+        <button class="ghost-btn" id="revealBtn">🔍 Reveal the Answer</button>
+        <div id="revealBox"></div>
+        <button class="draw-btn" id="playAgainBtn" style="margin-top:10px;">Play Again</button>
+        <button class="ghost-btn" id="leaveRoomBtn2">&larr; leave room</button>
+      `;
+      document.getElementById('revealBtn').addEventListener('click', () => {
+        const b = room.sellerCard.barrier;
+        document.getElementById('revealBox').innerHTML = `<div class="reveal-box">${b.icon} It was: <strong>${b.title}</strong></div>`;
+      });
+    }else{
+      const b = room.sellerCard.barrier;
+      app.innerHTML = `
+        <div class="stage"><div class="cardface">
+          <div class="tag">your barrier was</div>
+          <div class="icon">${b.icon}</div>
+          <div class="headline">${b.title}</div>
+        </div></div>
+        <p class="footer-note">Wait for the buyer group to guess, then compare notes together.</p>
+        <button class="draw-btn" id="playAgainBtn" style="margin-top:10px;">Play Again</button>
+        <button class="ghost-btn" id="leaveRoomBtn2">&larr; leave room</button>
+      `;
+    }
+    document.getElementById('leaveRoomBtn2').addEventListener('click', renderHome);
+    document.getElementById('playAgainBtn').addEventListener('click', playAgain);
+  }
+ 
+  async function playAgain(){
+    const room = await getRoom(code);
+    if(!room) return;
+    room.phase = 'lobby';
+    room.phaseStartedAt = null;
+    room.buyerCard = null;
+    room.sellerCard = null;
+    await setRoom(code, room);
+  }
+ 
+  // ---------------- INIT ----------------
+  renderHome();
 </script>
-
+ 
 </body>
 </html>
